@@ -1,6 +1,5 @@
-
 var moneySource = {
-	transferTo: function(amount, recipient){
+	transferTo: function(amount, recipient) {
 		this.decreaseBalance(amount);
 		recipient.transferFrom(amount);
 	},
@@ -10,8 +9,7 @@ var moneySource = {
 };
 
 var moneySink = {
-	updateLog: function(message, time, amount){},
-	transferFrom: function(amount){
+	transferFrom: function(amount) {
 		this.increaseBalance(amount);
 		this.updateLog('Transfer in', '2001-01-01', amount);
 	}
@@ -27,7 +25,7 @@ var transferMoneyContext = {
 
 var savingsAccount = {
 	balance: 1000,
-	accountId: null,
+	accountId: 'savings',
 
 	decreaseBalance: function(amount) {
 		this.balance = this.balance - amount;
@@ -36,11 +34,11 @@ var savingsAccount = {
 		this.balance = this.balance + amount;
 	},
 	updateLog: function(msg, date, amount) {
-		console.log("Account: " + accountId + ", message: " + msg + ", date: " + date + ", amount: " + amount);
+		console.log("Account: " + this.accountId + ", message: " + msg + ", date: " + date + ", amount: " + amount);
 	},
 	addRole: function(role) {
-		for(name in role){
-			if(role.hasOwnProperty(name) && typeof role[name] === 'function'){
+		for(name in role) {
+			if(role.hasOwnProperty(name) && typeof role[name] === 'function') {
 				this[name] = role[name];
 			}
 		}
@@ -49,6 +47,7 @@ var savingsAccount = {
 
 var checkingAccount = Object.create(savingsAccount);
 checkingAccount.balance = 0;
+checkingAccount.accountId = 'checking';
 
 transferMoneyContext.execute(300, savingsAccount, checkingAccount);
 transferMoneyContext.execute(100, checkingAccount, savingsAccount);
